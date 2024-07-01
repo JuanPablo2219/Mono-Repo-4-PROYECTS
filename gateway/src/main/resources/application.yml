@@ -1,9 +1,15 @@
 server:
   port: 8080
 spring:
+  application:
+    name: gateway-ms
   cloud:
     gateway:
-      routes:
+      discovery:
+        locator:
+          enabled: 'true'
+      mvc:
+        routes:
         - id: student-ms
           uri: lb://STUDENT-MS
           predicates:
@@ -12,15 +18,11 @@ spring:
         - id: grade-ms
           uri: lb://GRADE-MS
           predicates:
-          - Path=/grade/**
+            - Path=/grade/**
     loadbalancer:
       ribbon:
         enabled: 'false'
+
 eureka:
   instance:
-    instance-id=${spring.application.name}:${server.port}
-
-#logging:
-#  level:
-#    org.springframework.web: DEBUG
-#    org.apache.tomcat: INFO
+    instance-id: ${spring.application.name}:${server.port}
