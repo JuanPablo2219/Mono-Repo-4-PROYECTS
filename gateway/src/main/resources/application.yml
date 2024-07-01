@@ -1,0 +1,26 @@
+server:
+  port: 8080
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: student-ms
+          uri: lb://STUDENT-MS
+          predicates:
+            - Path=/student/**
+
+        - id: grade-ms
+          uri: lb://GRADE-MS
+          predicates:
+          - Path=/grade/**
+    loadbalancer:
+      ribbon:
+        enabled: 'false'
+eureka:
+  instance:
+    instance-id=${spring.application.name}:${server.port}
+
+#logging:
+#  level:
+#    org.springframework.web: DEBUG
+#    org.apache.tomcat: INFO
