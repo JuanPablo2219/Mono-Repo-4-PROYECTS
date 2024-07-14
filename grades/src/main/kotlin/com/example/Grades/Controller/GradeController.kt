@@ -1,7 +1,11 @@
 package com.example.Grades.Controller
 
+import com.example.Grades.client.StudentFeignClient
+import com.example.Grades.dto.StudentDto
 import com.example.Grades.model.Grade
 import com.example.Grades.service.GradeService
+import com.netflix.discovery.converters.Auto
+import jakarta.persistence.Id
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -10,12 +14,23 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/grade")
 class GradeController {
+
     @Autowired
     lateinit var gradeService: GradeService
 
     @GetMapping
     fun list ():List<Grade> {
         return gradeService.list()
+    }
+
+    @GetMapping("/{id}")
+    fun listById(@PathVariable("id") id: Long):ResponseEntity<*> {
+        return ResponseEntity(gradeService.listById(id), HttpStatus.OK)
+    }
+
+    @GetMapping("/student/{id}")
+    fun findAllByStudentId(@PathVariable("id") studentId: Long): List<Grade> {
+        return gradeService.findAllByStudentId(studentId)
     }
 
     @PostMapping
@@ -32,4 +47,5 @@ class GradeController {
     fun delete(@PathVariable("id") id : Long ): Boolean? {
         return gradeService.delete(id)
     }
+
 }

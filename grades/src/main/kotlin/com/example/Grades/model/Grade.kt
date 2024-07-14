@@ -17,7 +17,7 @@ class Grade {
     @Column(name = "grade")
     var grade: Double? = null
 
-    @JoinColumn(name = "student_id")
-    var student_id: Long? = null
+    @Column(name = "student_id")
+    var studentId: Long? = null
 
 }

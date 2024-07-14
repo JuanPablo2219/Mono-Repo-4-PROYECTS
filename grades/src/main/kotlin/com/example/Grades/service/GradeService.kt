@@ -1,5 +1,6 @@
 package com.example.Grades.service
 
+import com.example.Grades.client.StudentFeignClient
 import com.example.Grades.model.Grade
 import com.example.Grades.repository.GradeRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -9,14 +10,22 @@ import org.springframework.web.server.ResponseStatusException
 
 @Service
 class GradeService {
+
     @Autowired
     lateinit var gradeRepository: GradeRepository
 
-    fun list (): List<Grade> {
+    @Autowired
+    lateinit var studentFeignClient: StudentFeignClient
+
+    fun list(): List<Grade> {
         return gradeRepository.findAll()
     }
 
-    fun save (grade:Grade) : Grade {
+    fun listById(id: Long?): Grade? {
+        return gradeRepository.findById(id)
+    }
+
+    fun save(grade: Grade): Grade {
         try {
             grade.subject?.takeIf { it.trim().isNotEmpty() }
                 ?: throw Exception("Grade subject is null or empty")
@@ -29,17 +38,17 @@ class GradeService {
         }
     }
 
-    fun update(grade:Grade) : Grade {
+    fun update(grade: Grade): Grade {
         try {
             gradeRepository.findById(grade.id)
                 ?: throw Exception("Grade id is null")
             return gradeRepository.save(grade)
         } catch (ex: Exception) {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, ex.message)
+            throw ResponseStatusException(HttpStatus.OK, ex.message)
         }
     }
 
-    fun delete (id: Long?) : Boolean? {
+    fun delete(id: Long?): Boolean? {
         try {
             val response = gradeRepository.findById(id)
                 ?: throw Exception("Grade with id not found")
@@ -48,5 +57,9 @@ class GradeService {
         } catch (ex: Exception) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, ex.message)
         }
+    }
+
+    fun findAllByStudentId(studentId: Long): List<Grade> {
+        return gradeRepository.findAllByStudentId(studentId)
     }
 }
