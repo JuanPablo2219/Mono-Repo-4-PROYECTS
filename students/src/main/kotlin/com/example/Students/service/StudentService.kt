@@ -25,14 +25,16 @@ class StudentService {
     }
 
     fun listById(id: Long?): Student? {
-        return studentRepository.findById(id)
+        return studentRepository.findById(id).orElseThrow{
+            ResponseStatusException(HttpStatus.NOT_FOUND, "Studiante con ID $id no existe")
+        }
     }
 
     fun findByIdGrades(id: Long?): GradeStudentDto {
-        val student = studentRepository.findById(id)?:
-        throw ResponseStatusException(HttpStatus.NOT_FOUND)
-
-        val grades = gradeFeignClient.findByStudentId(student.id ?: error("Id del estudiante no debe ser nullo"))
+        val student = studentRepository.findById(id).orElseThrow {
+            ResponseStatusException(HttpStatus.NOT_FOUND, "Studiante con id $id no existe")
+        }
+        val grades = gradeFeignClient.findByStudentId(student.id ?: error("IStudiante con id $id no existe"))
 
         val studentGrades = GradeStudentDto()
         studentGrades.id = student.id

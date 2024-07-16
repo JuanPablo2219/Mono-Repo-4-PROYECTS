@@ -22,15 +22,17 @@ class GradeService {
     }
 
     fun listById(id: Long?): Grade? {
-        return gradeRepository.findById(id)
+        return gradeRepository.findById(id).orElseThrow {
+            ResponseStatusException(HttpStatus.NOT_FOUND, "Grade con ID $id no existe")
+        }
     }
 
     fun save(grade: Grade): Grade {
         try {
             grade.subject?.takeIf { it.trim().isNotEmpty() }
-                ?: throw Exception("Grade subject is null or empty")
+                ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Subject ${grade.subject} no son '${grade.subject}'")
             grade.grade?.takeIf { it >= 0.0 && it <= 10.0 }
-                ?: throw Exception("Grade must be between 0.0 and 10.0")
+                ?: throw ResponseStatusException(HttpStatus.NOT_FOUND,"Grade ${grade.grade} no son '${grade.grade}'")
 
             return gradeRepository.save(grade)
         } catch (ex: Exception) {

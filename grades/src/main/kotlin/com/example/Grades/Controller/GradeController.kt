@@ -1,11 +1,7 @@
 package com.example.Grades.Controller
 
-import com.example.Grades.client.StudentFeignClient
-import com.example.Grades.dto.StudentDto
 import com.example.Grades.model.Grade
 import com.example.Grades.service.GradeService
-import com.netflix.discovery.converters.Auto
-import jakarta.persistence.Id
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

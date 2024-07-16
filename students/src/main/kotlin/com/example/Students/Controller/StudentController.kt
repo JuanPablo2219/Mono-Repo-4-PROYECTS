@@ -4,7 +4,6 @@ import com.example.Students.client.GradeFeignClient
 import com.example.Students.dto.GradeStudentDto
 import com.example.Students.model.Student
 import com.example.Students.service.StudentService
-import com.netflix.discovery.converters.Auto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
